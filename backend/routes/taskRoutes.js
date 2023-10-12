@@ -13,11 +13,11 @@ taskRoute.get('/',getTasks)
 
 taskRoute.get('/:id',getTasksById)
 
-taskRoute.post("/create",addTask)
+taskRoute.post("/",addTask)
 
-taskRoute.delete("/remove/:id",removeTask)
+taskRoute.delete("/:id",removeTask)
 
-taskRoute.patch("/update/:id",updateTask)
+taskRoute.patch("/:id",updateTask)
 
 
 export default taskRoute

@@ -13,10 +13,10 @@ export const login=async (req,res,next)=>{
         const validateData=await loginSchema.validateAsync(req.body)
         const User=await user.findOne({email:validateData.email})
         if (!User){
-            throw CreateError.NotFound('User is not Found')
+            throw CreateError.BadRequest('Incorrect Email/password')
         }
         const isMatch=await User.isValidPassword(validateData.password)
-        if(!isMatch) throw CreateError.BadRequest('incorrect Email/Password')
+        if(!isMatch) throw CreateError.BadRequest('Incorrect Email/Password')
         
         const accessToken=await AccessGenerator(User._id)
         const previousRefresh=await authRefresh.findOne({'userId':User._id})
@@ -25,10 +25,10 @@ export const login=async (req,res,next)=>{
         }
         const refresh=await RefreshGenerator(User._id)
         await authRefresh({'userId':User._id, 'refresh':refresh}).save()
-        res.send({'id':User._id,accessToken,refresh,'usernama':User.username})
+        res.send({'id':User._id,accessToken,refresh,'username':User.username})
     } catch (error) {
         if(error.isJoi){
-            next(CreateError.BadRequest('Enter Correct Email/Password'))
+            next(CreateError.BadRequest('Incorrect Correct Email/Password'))
         }
         else{
             next(error)

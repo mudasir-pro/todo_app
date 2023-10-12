@@ -1,0 +1,10 @@
+.header{
+    height: 100px;
+    background-color: lightgray;
+
+}
+.TodoForm{
+    height: 500px;
+    width: 50%;
+    background-color: lightgray;
+}
