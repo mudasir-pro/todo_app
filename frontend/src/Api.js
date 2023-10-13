@@ -31,3 +31,15 @@ export const LoginApi=async (email,password)=>{
         }
 }
 
+export const RegisterApi= async (username,email,password)=>{
+    try {
+        const resp=await axios.post(`${url}/auth/register`,{username,email,password})
+        // console.log(resp)
+        return resp
+    } catch (error) {
+        console.log(error)
+        return {error}
+        
+    }
+}
+

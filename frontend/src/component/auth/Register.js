@@ -1,11 +1,31 @@
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import {useState} from "react"
+import { RegisterApi } from "../../Api"
+import { useUser } from "../context/UserContext"
+
 
 
 const Register=()=>{
     const [username,setUsername]=useState('')
     const [ email,setEmail]=useState('')
     const [password,setPassword]=useState('')
+    const [err,setErr]=useState(null)
+    const {user,addUser}=useUser()
+    const navigate=useNavigate()
+
+    const submitForm=async()=>{
+        const {data,status,error}=await RegisterApi(username,email,password)
+        if (!error){
+            addUser(data)
+            navigate('/')
+            
+        }
+        else{
+            console.log(error)
+            setErr(error.response.data.message)
+        }
+
+    }
     
 
     return(
@@ -51,7 +71,14 @@ const Register=()=>{
 
                     />
                     </div>
-                    <button type="submit" className="btn btn-primary mt-2">Sign In</button>
+                    <button type="submit"
+                    className="btn btn-primary mt-2"
+                    onClick={(e)=>{
+                        e.preventDefault()
+                        submitForm()
+                    }}
+                    >Sign In</button>
+                    {err&&<p className="text-danger">{err}</p>}
                     </form>
                     <p>Already Have an account <Link to={'/login'}>Login</Link></p>
             </div>

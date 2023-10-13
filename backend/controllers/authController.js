@@ -45,7 +45,7 @@ export const logout=async (req,res,next)=>{
 export const register=async (req,res,next)=>{
     try {
         const ValidatedData=await resgisterSchema.validateAsync(req.body)
-        const User=user(ValidatedData)
+        const User=user({...ValidatedData,email:(ValidatedData.email).toLowerCase()})
         const resp=await User.save()
         const accessToken=await AccessGenerator(resp._id)
         const refreshToken=await RefreshGenerator(resp._id)

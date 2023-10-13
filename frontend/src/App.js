@@ -5,6 +5,7 @@ import Header from './component/Header'
 import Login from './component/auth/Login'
 import { UserProvider } from './component/context/UserContext'
 import { useEffect, useState } from 'react'
+import Tasks from './component/tasks.js/Tasks'
 
 
 
@@ -36,7 +37,7 @@ const App=()=>{
             <Header/>
         <Routes>
             <Route element={<PrivateComponent/>}>
-                <Route path='/' element={<h1>Hi, From todo App</h1>}/>
+                <Route path='/' element={<Tasks/>}/>
             </Route>
             <Route path='/login' element={<Login/>}/>
             <Route path='/logout' element={<h1>Log Out</h1>}/>
