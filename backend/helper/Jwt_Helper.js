@@ -53,7 +53,7 @@ export const varifyAccess=(req,res,next)=>{
             next(CreateError.Unauthorized(error.name))
         }
         else{
-
+            console.log(req.headers)
             next(CreateError.Forbidden('Invalid Token'))
         }
         

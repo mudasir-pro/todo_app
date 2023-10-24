@@ -6,22 +6,43 @@ import Login from './component/auth/Login'
 import { UserProvider } from './component/context/UserContext'
 import { useEffect, useState } from 'react'
 import Tasks from './component/tasks.js/Tasks'
+import { TasksProvider } from './component/context/TaskContext'
 
 
 
 const App=()=>{
     const [user,setUser]=useState(null)
+    const [tasks,setTask]=useState([])
     
     const addUser=(User)=>{
-        console.log({"From Add User":User})
         setUser(User)
         localStorage.setItem('User',JSON.stringify(User))
+    }
+
+    const updateToken=(tokens)=>{
+        setUser((previous)=>{
+            return {...previous,accessToken:tokens.accessToken,refresh:tokens.refreshToken}
+        })
+        localStorage.removeItem('User')
+        localStorage.setItem('User',JSON.stringify({...user,accessToken:tokens.accessToken,refresh:tokens.refreshToken}))
     }
 
     const deleteUser=()=>{
         setUser(null)
         localStorage.clear()
+        clearTasks()
     }
+
+    const addTasks=(Tasks)=>{
+        setTask(Tasks)
+    }
+
+    const clearTasks=()=>{
+        setTask([])
+    }
+
+
+
     useEffect(()=>{
         const User=JSON.parse(localStorage.getItem('User'))
         if (User){
@@ -32,7 +53,8 @@ const App=()=>{
 
 
     return(
-        <UserProvider value={{user,addUser,deleteUser}}>
+        <UserProvider value={{user,addUser,deleteUser,updateToken}}>
+        <TasksProvider value={{tasks,addTasks,clearTasks}}>
         <BrowserRouter>
             <Header/>
         <Routes>
@@ -46,6 +68,7 @@ const App=()=>{
         
         
         </BrowserRouter>
+        </TasksProvider>
         </UserProvider>
     )
 }

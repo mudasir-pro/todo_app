@@ -2,14 +2,10 @@ import {useContext,createContext} from 'react'
 
 
 export const userContext=createContext({
-    user:{
-        "id":"lkjdsflds",
-        "accessToken":"slkdjfslkjfjds",
-        "refresh":"dfljsljfdsjfls",
-        "username":"mudasir"
-    },
+    user:{},
     addUser:()=>{},
-    deleteUser:()=>{}
+    deleteUser:()=>{},
+    updateToken:()=>{}
 });
 
 export const UserProvider=userContext.Provider

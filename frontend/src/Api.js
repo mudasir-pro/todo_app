@@ -1,25 +1,96 @@
 import axios from 'axios'
 
+
 const url="http://127.0.0.1:4500"
 
 
 
-export const getTodoApi=async()=>{
-    const {accessToken,refresh}=JSON.parse(localStorage.getItem('TodoAuth'))
-        const config={
-            Headers:{
-                Authorization:`bearer ${accessToken}`
-            }
+const updateTokensApi=async(parms,callFunction)=>{
+    const {user}=parms
+    try {   
+        const token=await axios.post(`${url}/auth/refresh`,{"refresh":user.user.refresh})
+        user.updateToken(token.data)
+        console.log({"after":"Api Call",user})
+        const UpdatedUser={...user,"user":{...user.user,"accessToken":token.data.accessToken,"refresh":token.data.refresh}}
+        callFunction({...parms,'user':UpdatedUser})
+
+        
+    } catch (refreshError) {
+        user.deleteUser()
+    }
+}
+
+export const getTasks= async(parms)=>{
+    const {user,addTasks}=parms;
+    const config={
+        headers:{
+            Authorization:`bearer ${user.user.accessToken}`
         }
-        const resp =await axios.get(`${url}/task`,config)
-        if (resp.status!==200){
-            console.log(resp)
+    }
+    try {
+        const resp=await axios.get(`${url}/task`,config)
+        addTasks(resp.data)
+        return resp
+        
+    } catch (error) {
+        if(error.response.data.message==="TokenExpiredError"){
+            updateTokensApi({user},getTasks)   
         }
         else{
-            return resp.data
+            return error
         }
         
+    }
 }
+
+export const deleteApi=async(parms)=>{
+    const {user,taskId,}=parms;
+    const config={
+        headers:{
+            Authorization:`bearer ${user.user.accessToken}`
+        }
+    }
+
+    try {
+        const resp= await axios.delete(`${url}/task/${taskId}`,config)
+    }
+    catch (error) {
+        console.log()
+        if(error.resp.data.message==="TokenExpiredError"){
+            updateTokensApi({parms},deleteApi)
+        }
+        else{
+            console.log(error)
+        }
+        
+    }
+}
+
+
+
+export const addTask= async(parms)=>{
+    const {user,data}=parms
+    const config={
+        headers:{
+            Authorization:`bearer ${user.user.accessToken}`
+        }
+    }
+    try {
+        const resp=await axios.post(`${url}/task`,data,config)
+    }
+    catch(error){
+        
+    }
+}
+
+
+
+
+
+
+
+
+
 
 export const LoginApi=async (email,password)=>{
         try {
@@ -34,7 +105,6 @@ export const LoginApi=async (email,password)=>{
 export const RegisterApi= async (username,email,password)=>{
     try {
         const resp=await axios.post(`${url}/auth/register`,{username,email,password})
-        // console.log(resp)
         return resp
     } catch (error) {
         console.log(error)
@@ -42,4 +112,8 @@ export const RegisterApi= async (username,email,password)=>{
         
     }
 }
+
+
+
+
 

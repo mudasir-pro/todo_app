@@ -66,6 +66,7 @@ export const register=async (req,res,next)=>{
 
 export const refresh=async (req,res,next)=>{
     try {
+        console.log(req.body.refresh)
         const OldRefresh=jwt.verify(req.body.refresh,process.env.REFRESH_SECRATE)
         const updateRefresh=await authRefresh.updateOne({'userId': OldRefresh.userId},
         {$set:{refresh:await RefreshGenerator(OldRefresh.userId)}})

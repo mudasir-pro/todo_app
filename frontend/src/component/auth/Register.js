@@ -14,7 +14,7 @@ const Register=()=>{
     const navigate=useNavigate()
 
     const submitForm=async()=>{
-        const {data,status,error}=await RegisterApi(username,email,password)
+        const {data,error}=await RegisterApi(username,email,password)
         if (!error){
             addUser(data)
             navigate('/')

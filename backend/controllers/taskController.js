@@ -30,6 +30,7 @@ export const getTasksById=async (req,res,next)=>{
 
 export const addTask=async (req,res,next)=>{
     try {
+        console.log(req.body)
         const Task=task({...req.body,'UserId':req.userId})
         const resp=await Task.save()
         res.status(201).json({
