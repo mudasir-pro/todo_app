@@ -33,7 +33,7 @@ export const getTasks= async(parms)=>{
         return resp
         
     } catch (error) {
-        if(error.response.data.message==="TokenExpiredError"){
+        if(error.response.data && error.response.data.message==="TokenExpiredError"){
             updateTokensApi({user},getTasks)   
         }
         else{
@@ -79,8 +79,37 @@ export const addTask= async(parms)=>{
         const resp=await axios.post(`${url}/task`,data,config)
     }
     catch(error){
-        
+        if(error.response.data && error.response.data.message==="TokenExpiredError"){
+            updateTokensApi({user},addTask)   
+        }
+        else{
+            return error
+        }
     }
+}
+
+
+
+export const updateTask= async(params)=>{
+    const {user,data}=params
+    const config={
+        headers:{
+            Authorization:`bearer ${user.user.accessToken}`
+        }
+    }
+    try{
+        const resp=await axios.patch(`${url}/task/${data.id}`,data,config)
+        // console.log(data)
+    }
+    catch(error){
+        if(error.response.data && error.response.data.message==="TokenExpiredError"){
+            updateTokensApi({user},updateTask)   
+        }
+        else{
+            return error
+        }
+    }
+
 }
 
 

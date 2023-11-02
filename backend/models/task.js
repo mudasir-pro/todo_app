@@ -12,7 +12,7 @@ const schema=new mongoose.Schema({
         type:Date,
         default: Date.now
     },
-    WantToCompleteAT:{
+    deadline:{
         type:Date
     },
     UserId:{

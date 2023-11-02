@@ -9,23 +9,28 @@ const Header=()=>{
     
 
     return(
-        <header className="d-flex justify-content-center w-100 header align-items-center">
-            <Link to={'/'} className="d-flex justify-content-center align-items-center h-100 w-100 text-decoration-none">
-            <img src={logo} className="h-50"/>
-            <h1>TodoApp</h1>
+        <header className="flex h-20 justify-around bg-gray-700 p-2">
+            <Link to={'/'} className="flex items-center">
+            <img src={logo} className=" h-5/6 mx-2"/>
+            <h1 className=" text-sky-500 font-bold text-3xl mx-2">TodoApp</h1>
             </Link>
-            <div className="p-3 d-flex ">
+            <div className="p-3 d-flex items-center">
                 {
                 user?
                     <>  
-                    <p>{user.username}</p>
-                    <button onClick={(e)=>{
+                    <p className="px-2 py-1 text-white font-bold">{user.username}</p>
+                    <button
+                    className=" bg-sky-500 hover:bg-sky-600 px-4 text-white py-2"
+                    onClick={(e)=>{
                         deleteUser()
                         navigate('/login')
                     }}>Logout</button>
                     </>
                     :
-                    <button onClick={(e)=>{
+                    <button
+                    className=" bg-sky-500 hover:bg-sky-600 px-4 text-white py-2"
+                    onClick={(e)=>{
+                        
                         navigate('/login')
                     }}>Login</button>
                 }

@@ -44,6 +44,7 @@ export const RefreshGenerator=(userId)=>{
 export const varifyAccess=(req,res,next)=>{
     try {
         const accesToken=req.headers.authorization.split(' ')[1]
+        // console.log(req.headers.authorization)
         const decoded=jwt.verify(accesToken,process.env.ACCESS_SECRATE)
         req.userId=decoded.userId
         next()
@@ -53,7 +54,8 @@ export const varifyAccess=(req,res,next)=>{
             next(CreateError.Unauthorized(error.name))
         }
         else{
-            console.log(req.headers)
+            // console.log(req.headers)
+            console.log(error)
             next(CreateError.Forbidden('Invalid Token'))
         }
         
